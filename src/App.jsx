@@ -7,6 +7,7 @@ import { Toaster } from 'sonner';
 import Auth from './pages/Auth';
 import Dashboard from './pages/Dashboard';
 import Tasks from './pages/Tasks';
+import Expenses from './pages/Expenses';
 import Groups from './pages/Groups';
 import GroupDetail from './pages/GroupDetail';
 
@@ -49,6 +50,7 @@ function App() {
         >
           {/* Dashboard Children */}
           <Route index element={<Tasks />} />
+          <Route path="expenses" element={<Expenses />} />
           <Route path="groups" element={<Groups />} />
           <Route path="groups/:groupId" element={<GroupDetail />} />
         </Route>

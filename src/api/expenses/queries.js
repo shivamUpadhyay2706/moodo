@@ -7,3 +7,7 @@ export const listExpensesQuery = async (groupId) => {
 export const getExpenseBalancesQuery = async (groupId) => {
   return customFetch(`/groups/${groupId}/expenses/balances`);
 };
+
+export const listPersonalExpensesQuery = async () => {
+  return customFetch(`/expenses`);
+};
