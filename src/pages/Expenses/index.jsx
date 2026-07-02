@@ -10,7 +10,7 @@ import Button from '../../component/Button';
 
 const Expenses = () => {
   const {
-    expenses,
+    expenses: filteredExpenses,
     rawExpensesCount,
     loading,
     isModalOpen,
