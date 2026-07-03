@@ -386,7 +386,7 @@ const GroupDetail = () => {
                           </span>
                         </div>
                         <span className="text-lg font-black text-emerald-400 text-glow-indigo">
-                          ${exp.amount.toFixed(2)}
+                          ₹{exp.amount.toFixed(2)}
                         </span>
                       </div>
 
@@ -446,7 +446,7 @@ const GroupDetail = () => {
                                   ? 'text-rose-455' 
                                   : 'text-slate-500'
                             }`}>
-                              {positive ? `+ $${bal.netBalance.toFixed(2)}` : negative ? `- $${Math.abs(bal.netBalance).toFixed(2)}` : 'Settle'}
+                              {positive ? `+ ₹${bal.netBalance.toFixed(2)}` : negative ? `- ₹${Math.abs(bal.netBalance).toFixed(2)}` : 'Settle'}
                             </span>
                           </div>
                         );
@@ -486,7 +486,7 @@ const GroupDetail = () => {
                           <div className="flex justify-between sm:justify-end items-center gap-4">
                             <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wide">Suggested transfer</span>
                             <span className="text-base font-black text-slate-100 text-glow-indigo bg-slate-900 border border-slate-800 px-3.5 py-1 rounded-xl">
-                              ${set.amount.toFixed(2)}
+                              ₹{set.amount.toFixed(2)}
                             </span>
                           </div>
 
@@ -683,7 +683,7 @@ const GroupDetail = () => {
               <Input
                 name="amount"
                 type="number"
-                label="Total Cost ($)"
+                label="Total Cost (₹)"
                 placeholder="0.00"
               />
               

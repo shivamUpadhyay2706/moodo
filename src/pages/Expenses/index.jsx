@@ -23,9 +23,9 @@ const Expenses = () => {
   } = useExpenses();
 
   const formatCurrency = (value) => {
-    return new Intl.NumberFormat('en-US', {
+    return new Intl.NumberFormat('en-IN', {
       style: 'currency',
-      currency: 'USD'
+      currency: 'INR'
     }).format(value);
   };
 
@@ -235,7 +235,7 @@ const Expenses = () => {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <Input
-                  label="Amount ($) 💰"
+                  label="Amount (₹) 💰"
                   name="amount"
                   type="number"
                   step="0.01"

@@ -526,7 +526,7 @@ const Tasks = () => {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <Input
-                  label="Amount ($) 💰"
+                  label="Amount (₹) 💰"
                   name="amount"
                   type="number"
                   step="0.01"
