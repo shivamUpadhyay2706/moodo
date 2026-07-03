@@ -12,6 +12,11 @@ import {
   STATUS_OPTIONS, 
   RECURRENCE_OPTIONS 
 } from './constant';
+import { 
+  INITIAL_VALUES as INITIAL_EXPENSE_VALUES, 
+  EXPENSE_SCHEMA, 
+  CATEGORY_OPTIONS 
+} from '../Expenses/constant';
 import Input from '../../component/Input';
 import Select from '../../component/Select';
 import Button from '../../component/Button';
@@ -44,6 +49,9 @@ const Tasks = () => {
     handleToggleSubtask,
     handleAddSubtask,
     handleDeleteSubtask,
+    isExpenseOpen,
+    setIsExpenseOpen,
+    handleAddExpense
   } = useTasks();
 
   const getPriorityColor = (priority) => {
@@ -183,14 +191,24 @@ const Tasks = () => {
 
         </div>
 
-        <Button
-          onClick={() => setIsCreateOpen(true)}
-          variant="primary"
-          className="flex items-center gap-2"
-        >
-          <Plus size={18} />
-          Create Task
-        </Button>
+        <div className="flex gap-2 w-full md:w-auto mt-2 md:mt-0">
+          <Button
+            onClick={() => setIsCreateOpen(true)}
+            variant="primary"
+            className="flex-1 md:flex-none flex items-center justify-center gap-2 font-bold whitespace-nowrap cursor-pointer"
+          >
+            <Plus size={16} />
+            Add Task
+          </Button>
+          <Button
+            onClick={() => setIsExpenseOpen(true)}
+            variant="secondary"
+            className="flex-1 md:flex-none flex items-center justify-center gap-2 font-bold whitespace-nowrap cursor-pointer"
+          >
+            <Plus size={16} />
+            Add Expense
+          </Button>
+        </div>
       </div>
 
       {/* 📋 Task Workspace Grid (Main List + Details View) */}
@@ -482,6 +500,71 @@ const Tasks = () => {
                   Create Task 🚀
                 </Button>
               </div>
+            </Form>
+          )}
+        </Formik>
+      </Modal>
+
+      {/* ➕ Create Expense Modal */}
+      <Modal
+        isOpen={isExpenseOpen}
+        onClose={() => setIsExpenseOpen(false)}
+        title="Log Personal Expense 💳"
+      >
+        <Formik
+          initialValues={INITIAL_EXPENSE_VALUES}
+          validationSchema={EXPENSE_SCHEMA}
+          onSubmit={handleAddExpense}
+        >
+          {({ isSubmitting }) => (
+            <Form className="space-y-4">
+              <Input
+                label="Description 📝"
+                name="description"
+                placeholder="e.g., Target grocery run"
+              />
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <Input
+                  label="Amount ($) 💰"
+                  name="amount"
+                  type="number"
+                  step="0.01"
+                  placeholder="0.00"
+                />
+
+                <Input
+                  label="Date (Optional) 📅"
+                  name="date"
+                  type="date"
+                />
+              </div>
+
+              <div className="z-50">
+                <Select
+                  label="Category 🏷️"
+                  name="category"
+                  options={CATEGORY_OPTIONS}
+                />
+              </div>
+
+              <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-900 mt-5">
+                <button
+                  type="button"
+                  onClick={() => setIsExpenseOpen(false)}
+                  className="px-4 py-2 text-xs font-bold text-slate-400 hover:text-slate-200 transition-colors border border-transparent hover:border-slate-800 rounded-xl cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <Button
+                  type="submit"
+                  isLoading={isSubmitting}
+                  className="font-bold px-5 py-2 cursor-pointer"
+                >
+                  Log Expense
+                </Button>
+              </div>
+
             </Form>
           )}
         </Formik>

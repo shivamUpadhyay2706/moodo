@@ -1,5 +1,12 @@
 import { useState, useEffect, useCallback } from 'react';
-import { listTasksQuery, getTaskStatsQuery, createTaskMutation, updateTaskMutation, deleteTaskMutation } from '../../api';
+import { 
+  listTasksQuery, 
+  getTaskStatsQuery, 
+  createTaskMutation, 
+  updateTaskMutation, 
+  deleteTaskMutation,
+  createPersonalExpenseMutation
+} from '../../api';
 import { showToast } from '../../util/sonner';
 
 export const useTasks = () => {
@@ -15,6 +22,23 @@ export const useTasks = () => {
   });
   const [loading, setLoading] = useState(false);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [isExpenseOpen, setIsExpenseOpen] = useState(false);
+
+  const handleAddExpense = async (values, { resetForm }) => {
+    try {
+      await createPersonalExpenseMutation({
+        description: values.description,
+        amount: parseFloat(values.amount),
+        category: values.category,
+        date: values.date ? new Date(values.date).toISOString() : undefined
+      });
+      setIsExpenseOpen(false);
+      resetForm();
+      showToast.success('Personal expense logged successfully! 💰');
+    } catch (err) {
+      showToast.error(err.message || 'Failed to log personal expense ❌');
+    }
+  };
 
   // Filters state
   const [search, setSearch] = useState('');
@@ -199,5 +223,8 @@ export const useTasks = () => {
     handleToggleSubtask,
     handleAddSubtask,
     handleDeleteSubtask,
+    isExpenseOpen,
+    setIsExpenseOpen,
+    handleAddExpense
   };
 };

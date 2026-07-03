@@ -168,7 +168,7 @@ const Expenses = () => {
             {filteredExpenses.map((exp) => (
               <div
                 key={exp._id}
-                className="bg-slate-950/20 border border-slate-900 hover:border-slate-800 rounded-2xl p-4 flex items-center justify-between gap-4 transition-all duration-200 group"
+                className="bg-slate-950/20 border border-slate-900 hover:border-slate-800 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 transition-all duration-200 group"
               >
                 {/* Info block */}
                 <div className="flex items-center gap-3.5 min-w-0">
@@ -179,12 +179,12 @@ const Expenses = () => {
                     <span className="text-sm font-bold text-slate-200 block truncate leading-tight mb-1">
                       {exp.description}
                     </span>
-                    <div className="flex items-center gap-3 text-xs font-medium text-slate-500">
+                    <div className="flex flex-wrap items-center gap-2 text-xs font-medium text-slate-500">
                       <span className="flex items-center gap-1">
                         <Calendar size={12} className="text-slate-600" />
                         {formatDate(exp.date)}
                       </span>
-                      <span className="h-1 w-1 rounded-full bg-slate-700" />
+                      <span className="h-1 w-1 rounded-full bg-slate-700 hidden sm:inline" />
                       <span className="flex items-center gap-1 uppercase tracking-wide text-[10px] font-bold text-slate-400 bg-slate-900 border border-slate-800/80 px-1.5 py-0.5 rounded-md">
                         <Tag size={10} className="text-indigo-400" />
                         {exp.category}
@@ -194,14 +194,14 @@ const Expenses = () => {
                 </div>
 
                 {/* Actions & Cost */}
-                <div className="flex items-center gap-4 shrink-0">
+                <div className="flex items-center justify-between sm:justify-end gap-4 border-t border-slate-900/40 pt-2.5 sm:pt-0 sm:border-none">
                   <span className="text-base font-black tracking-tight text-slate-200">
                     {formatCurrency(exp.amount)}
                   </span>
                   
                   <button
                     onClick={() => handleDeleteExpense(exp._id)}
-                    className="p-2.5 rounded-xl text-slate-500 hover:text-rose-400 hover:bg-rose-500/5 border border-transparent hover:border-rose-500/10 transition-all duration-200 cursor-pointer"
+                    className="p-2 py-1.5 px-2.5 rounded-xl text-slate-500 hover:text-rose-400 hover:bg-rose-500/5 border border-transparent hover:border-rose-500/10 transition-all duration-200 cursor-pointer"
                     title="Delete entry"
                   >
                     <Trash2 size={15} />

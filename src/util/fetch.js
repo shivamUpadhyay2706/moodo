@@ -1,3 +1,7 @@
+import { store } from '../redux/store';
+import { logout } from '../redux/slices/authSlice';
+import { showToast } from './sonner';
+
 const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api';
 
 export const customFetch = async (endpoint, options = {}) => {
@@ -31,6 +35,10 @@ export const customFetch = async (endpoint, options = {}) => {
   }
 
   if (!response.ok) {
+    if (response.status === 401) {
+      store.dispatch(logout());
+      showToast.error("Session expired! Please sign in again. 🔒");
+    }
     const errorMessage = data?.message || `HTTP Error ${response.status}: Something went wrong ❌`;
     const error = new Error(errorMessage);
     error.status = response.status;
