@@ -199,7 +199,7 @@ const GroupDetail = () => {
                             )}
                           </button>
                           <div className="min-w-0">
-                            <h4 className={`text-sm font-bold text-slate-200 truncate ${task.status === 'completed' ? 'line-through text-slate-500' : ''}`}>
+                            <h4 className={`text-sm font-bold text-slate-200 whitespace-normal break-words ${task.status === 'completed' ? 'line-through text-slate-500' : ''}`}>
                               {task.title}
                             </h4>
                             <div className="flex flex-wrap items-center gap-2 mt-1.5 text-[10px] text-slate-500 font-medium">
@@ -323,7 +323,7 @@ const GroupDetail = () => {
                                 ) : (
                                   <Circle size={13} className="text-slate-500 shrink-0" />
                                 )}
-                                <span className={`truncate ${st.isCompleted ? 'line-through text-slate-500' : ''}`}>
+                                <span className={`whitespace-normal break-words ${st.isCompleted ? 'line-through text-slate-500' : ''}`}>
                                   {st.title}
                                 </span>
                               </button>
@@ -380,7 +380,7 @@ const GroupDetail = () => {
                       
                       <div className="flex justify-between items-start gap-4">
                         <div className="min-w-0">
-                          <h4 className="text-sm font-bold text-slate-200 truncate">{exp.description}</h4>
+                          <h4 className="text-sm font-bold text-slate-200 whitespace-normal break-words">{exp.description}</h4>
                           <span className="text-[10px] text-slate-550 block mt-0.5">
                             {new Date(exp.date).toLocaleDateString()}
                           </span>
@@ -395,7 +395,7 @@ const GroupDetail = () => {
                           <span className="text-[10px] font-bold text-indigo-400 block">
                             Paid by: @{exp.paidBy?.username}
                           </span>
-                          <span className="text-[10px] text-slate-450 block truncate mt-0.5">
+                          <span className="text-[10px] text-slate-450 block whitespace-normal break-words mt-0.5">
                             Split among: {exp.splitAmong?.map(u => `@${u.username}`).join(', ')}
                           </span>
                         </div>

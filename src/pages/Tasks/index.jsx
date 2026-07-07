@@ -51,7 +51,9 @@ const Tasks = () => {
     handleDeleteSubtask,
     isExpenseOpen,
     setIsExpenseOpen,
-    handleAddExpense
+    handleAddExpense,
+    dateFilter,
+    setDateFilter
   } = useTasks();
 
   const getPriorityColor = (priority) => {
@@ -150,8 +152,8 @@ const Tasks = () => {
       </div>
 
       {/* 🔍 Filters & Create Bar */}
-      <div className="flex flex-col md:flex-row gap-4 justify-between items-stretch md:items-center p-4 bg-slate-900/20 border border-slate-900 rounded-2xl">
-        <div className="flex-1 grid grid-cols-1 sm:grid-cols-3 gap-3">
+      <div className="flex flex-col-reverse md:flex-row gap-4 justify-between items-stretch md:items-center p-4 bg-slate-900/20 border border-slate-900 rounded-2xl">
+        <div className="flex-1 grid grid-cols-1 sm:grid-cols-4 gap-3">
           
           {/* Search */}
           <div className="relative flex items-center">
@@ -163,6 +165,25 @@ const Tasks = () => {
               onChange={(e) => setSearch(e.target.value)}
               className="w-full pl-9 pr-4 py-2 text-sm rounded-xl text-slate-200 bg-slate-950/40 border border-slate-800 outline-none focus:border-indigo-500 transition-colors"
             />
+          </div>
+
+          {/* Date Filter */}
+          <div className="relative flex items-center">
+            <input
+              type="date"
+              value={dateFilter}
+              onChange={(e) => setDateFilter(e.target.value)}
+              className="w-full px-4 py-2 text-sm rounded-xl text-slate-200 bg-slate-950/40 border border-slate-800 outline-none focus:border-indigo-500 transition-colors cursor-pointer"
+            />
+            {dateFilter && (
+              <button
+                type="button"
+                onClick={() => setDateFilter('')}
+                className="absolute right-8 text-rose-400 hover:text-rose-300 text-xs font-bold cursor-pointer"
+              >
+                Clear
+              </button>
+            )}
           </div>
 
           {/* Status filter */}
@@ -191,7 +212,7 @@ const Tasks = () => {
 
         </div>
 
-        <div className="flex gap-2 w-full md:w-auto mt-2 md:mt-0">
+        <div className="flex gap-2 w-full md:w-auto md:mt-0">
           <Button
             onClick={() => setIsCreateOpen(true)}
             variant="primary"
@@ -254,7 +275,7 @@ const Tasks = () => {
                       {getStatusIcon(task.status)}
                     </button>
                     <div className="min-w-0">
-                      <h4 className={`text-base font-bold text-slate-200 truncate ${
+                      <h4 className={`text-base font-bold text-slate-200 whitespace-normal break-words ${
                         task.status === 'completed' ? 'line-through text-slate-500' : ''
                       }`}>
                         {task.title}
@@ -401,9 +422,9 @@ const Tasks = () => {
                           ) : (
                             <Circle size={14} className="text-slate-500 shrink-0" />
                           )}
-                          <span className={`truncate ${st.isCompleted ? 'line-through text-slate-500' : ''}`}>
-                            {st.title}
-                          </span>
+                           <span className={`whitespace-normal break-words ${st.isCompleted ? 'line-through text-slate-500' : ''}`}>
+                             {st.title}
+                           </span>
                         </button>
                         <button
                           onClick={() => handleDeleteSubtask(selectedTask, idx)}

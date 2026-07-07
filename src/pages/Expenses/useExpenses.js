@@ -8,6 +8,13 @@ export const useExpenses = () => {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [categoryFilter, setCategoryFilter] = useState('');
+  const [dateFilter, setDateFilter] = useState(() => {
+    const d = new Date();
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  });
 
   const fetchExpenses = async () => {
     setLoading(true);
@@ -52,15 +59,36 @@ export const useExpenses = () => {
     }
   };
 
-  // Filtered Expenses list
-  const filteredExpenses = categoryFilter
-    ? expenses.filter((exp) => exp.category === categoryFilter)
-    : expenses;
+  const getLocalDateString = (dateInput) => {
+    if (!dateInput) return '';
+    const d = new Date(dateInput);
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
+  // Filtered Expenses list by category and date
+  const filteredExpenses = expenses.filter((exp) => {
+    if (categoryFilter && exp.category !== categoryFilter) return false;
+    if (dateFilter) {
+      const expDateStr = getLocalDateString(exp.date);
+      if (expDateStr !== dateFilter) return false;
+    }
+    return true;
+  });
 
   // Calculate statistics
-  const totalSpent = filteredExpenses.reduce((sum, exp) => sum + exp.amount, 0);
-  const logsCount = filteredExpenses.length;
-  const averageExpense = logsCount > 0 ? totalSpent / logsCount : 0;
+  // 1. Overall Total Spent (sum of all expenses)
+  const totalSpentOverall = expenses.reduce((sum, exp) => sum + exp.amount, 0);
+
+  // 2. Average Day Expense (overall total / unique days)
+  const uniqueDays = new Set(expenses.map(exp => getLocalDateString(exp.date)));
+  const uniqueDaysCount = uniqueDays.size;
+  const averageDailyExpense = uniqueDaysCount > 0 ? totalSpentOverall / uniqueDaysCount : 0;
+
+  // 3. Filtered spent for active date/category filter
+  const filteredSpent = filteredExpenses.reduce((sum, exp) => sum + exp.amount, 0);
 
   return {
     expenses: filteredExpenses,
@@ -70,12 +98,17 @@ export const useExpenses = () => {
     setIsModalOpen,
     categoryFilter,
     setCategoryFilter,
+    dateFilter,
+    setDateFilter,
     handleAddExpense,
     handleDeleteExpense,
     stats: {
-      totalSpent,
-      logsCount,
-      averageExpense
+      totalSpent: totalSpentOverall,
+      averageExpense: averageDailyExpense,
+      filteredSpent,
+      logsCount: expenses.length,
+      filteredLogsCount: filteredExpenses.length,
+      uniqueDaysCount
     }
   };
 };

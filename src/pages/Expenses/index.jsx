@@ -17,6 +17,8 @@ const Expenses = () => {
     setIsModalOpen,
     categoryFilter,
     setCategoryFilter,
+    dateFilter,
+    setDateFilter,
     handleAddExpense,
     handleDeleteExpense,
     stats
@@ -65,7 +67,7 @@ const Expenses = () => {
       {/* Stats Cards Section */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
         
-        {/* Total Spent */}
+        {/* Total Spent Overall */}
         <div className="relative overflow-hidden bg-slate-950/40 border border-slate-800/80 rounded-2xl p-5 flex items-center gap-4 transition-all duration-300 hover:border-slate-700/80 group">
           <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/5 to-transparent pointer-events-none" />
           <div className="h-12 w-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 group-hover:scale-110 transition-transform duration-200">
@@ -73,15 +75,18 @@ const Expenses = () => {
           </div>
           <div>
             <span className="text-xs font-bold text-slate-500 uppercase tracking-wider block">
-              Total Spent
+              Total Spent (Overall)
             </span>
             <span className="text-2xl font-black tracking-tight text-indigo-400">
               {formatCurrency(stats.totalSpent)}
             </span>
+            <span className="text-[10px] text-slate-500 block mt-0.5">
+              Across all logged items
+            </span>
           </div>
         </div>
 
-        {/* Number of Logs */}
+        {/* Filtered Spent */}
         <div className="relative overflow-hidden bg-slate-950/40 border border-slate-800/80 rounded-2xl p-5 flex items-center gap-4 transition-all duration-300 hover:border-slate-700/80 group">
           <div className="absolute inset-0 bg-gradient-to-tr from-emerald-500/5 to-transparent pointer-events-none" />
           <div className="h-12 w-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 group-hover:scale-110 transition-transform duration-200">
@@ -89,15 +94,18 @@ const Expenses = () => {
           </div>
           <div>
             <span className="text-xs font-bold text-slate-500 uppercase tracking-wider block">
-              Logged Items
+              Filtered Spent
             </span>
             <span className="text-2xl font-black tracking-tight text-emerald-400">
-              {stats.logsCount}
+              {formatCurrency(stats.filteredSpent)}
+            </span>
+            <span className="text-[10px] text-slate-500 block mt-0.5">
+              For active filters ({stats.filteredLogsCount} items)
             </span>
           </div>
         </div>
 
-        {/* Average Expense */}
+        {/* Average Day Expense */}
         <div className="relative overflow-hidden bg-slate-950/40 border border-slate-800/80 rounded-2xl p-5 flex items-center gap-4 transition-all duration-300 hover:border-slate-700/80 group">
           <div className="absolute inset-0 bg-gradient-to-tr from-cyan-500/5 to-transparent pointer-events-none" />
           <div className="h-12 w-12 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 group-hover:scale-110 transition-transform duration-200">
@@ -105,10 +113,13 @@ const Expenses = () => {
           </div>
           <div>
             <span className="text-xs font-bold text-slate-500 uppercase tracking-wider block">
-              Average Expense
+              Average Day Expense
             </span>
             <span className="text-2xl font-black tracking-tight text-cyan-400">
               {formatCurrency(stats.averageExpense)}
+            </span>
+            <span className="text-[10px] text-slate-500 block mt-0.5">
+              Across {stats.uniqueDaysCount} active days
             </span>
           </div>
         </div>
@@ -123,20 +134,41 @@ const Expenses = () => {
           <div className="flex items-center gap-2">
             <span className="h-2 w-2 rounded-full bg-indigo-500" />
             <span className="text-sm font-bold text-slate-300">
-              Expense Logs ({stats.logsCount})
+              Expense Logs ({stats.filteredLogsCount})
             </span>
           </div>
 
-          {/* Category Filter Selector */}
-          <div className="w-full md:w-56 shrink-0 z-30">
-            <Select
-              value={categoryFilter}
-              onChange={setCategoryFilter}
-              options={[
-                { value: '', label: 'All Categories' },
-                ...CATEGORY_OPTIONS
-              ]}
-            />
+          <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto z-35">
+            {/* Date Filter */}
+            <div className="relative flex items-center w-full sm:w-44">
+              <input
+                type="date"
+                value={dateFilter}
+                onChange={(e) => setDateFilter(e.target.value)}
+                className="w-full px-4 py-2 text-sm rounded-xl text-slate-200 bg-slate-950/40 border border-slate-800 outline-none focus:border-indigo-500 transition-colors cursor-pointer"
+              />
+              {dateFilter && (
+                <button
+                  type="button"
+                  onClick={() => setDateFilter('')}
+                  className="absolute right-8 text-rose-455 hover:text-rose-400 text-xs font-bold cursor-pointer"
+                >
+                  Clear
+                </button>
+              )}
+            </div>
+
+            {/* Category Filter Selector */}
+            <div className="w-full sm:w-44 shrink-0 z-30">
+              <Select
+                value={categoryFilter}
+                onChange={setCategoryFilter}
+                options={[
+                  { value: '', label: 'All Categories' },
+                  ...CATEGORY_OPTIONS
+                ]}
+              />
+            </div>
           </div>
         </div>
 
@@ -176,7 +208,7 @@ const Expenses = () => {
                     {CATEGORY_EMOJIS[exp.category] || '🏷️'}
                   </div>
                   <div className="min-w-0">
-                    <span className="text-sm font-bold text-slate-200 block truncate leading-tight mb-1">
+                    <span className="text-sm font-bold text-slate-200 block whitespace-normal break-words leading-tight mb-1">
                       {exp.description}
                     </span>
                     <div className="flex flex-wrap items-center gap-2 text-xs font-medium text-slate-500">

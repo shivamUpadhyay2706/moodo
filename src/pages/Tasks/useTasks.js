@@ -46,6 +46,13 @@ export const useTasks = () => {
   const [priorityFilter, setPriorityFilter] = useState('');
   const [sortBy, setSortBy] = useState('createdAt');
   const [sortOrder, setSortOrder] = useState('desc');
+  const [dateFilter, setDateFilter] = useState(() => {
+    const d = new Date();
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  });
 
   // Selected task state (for details/subtasks)
   const [selectedTask, setSelectedTask] = useState(null);
@@ -197,8 +204,23 @@ export const useTasks = () => {
     }
   };
 
+  const getLocalDateString = (dateInput) => {
+    if (!dateInput) return '';
+    const d = new Date(dateInput);
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
+  const filteredTasks = tasks.filter(task => {
+    if (!dateFilter) return true;
+    if (!task.dueDate) return false;
+    return getLocalDateString(task.dueDate) === dateFilter;
+  });
+
   return {
-    tasks,
+    tasks: filteredTasks,
     stats,
     loading,
     isCreateOpen,
@@ -225,6 +247,8 @@ export const useTasks = () => {
     handleDeleteSubtask,
     isExpenseOpen,
     setIsExpenseOpen,
-    handleAddExpense
+    handleAddExpense,
+    dateFilter,
+    setDateFilter
   };
 };
